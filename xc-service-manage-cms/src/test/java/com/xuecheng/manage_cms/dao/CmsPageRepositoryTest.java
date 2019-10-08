@@ -24,7 +24,7 @@ public class CmsPageRepositoryTest {
         System.out.println(all);
     }
 
-    //分页查询
+    // 分页查询
     @Test
     public void testFindPage() {
         //分页参数
