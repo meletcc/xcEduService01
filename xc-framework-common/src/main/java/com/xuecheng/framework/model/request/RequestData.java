@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * Created by mrt on 2018/3/5.
+ * 请求参数
  */
 @Data
 @ToString

@@ -1,17 +1,16 @@
 package com.xuecheng.framework.domain.cms.request;
 
+import com.xuecheng.framework.model.request.RequestData;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @author Administrator
- * @version 1.0
- * @create 2018-09-12 14:59
+ * 接收页面查询的查询条件类
+ * 为后期扩展需求，请求类型统一继承RequestData类型
  **/
 @Data
-public class QueryPageRequest {
-    //接收页面查询的查询条件
-    //站点id
+public class QueryPageRequest extends RequestData {
+
     //站点id
     @ApiModelProperty("站点id")
     private String siteId;
