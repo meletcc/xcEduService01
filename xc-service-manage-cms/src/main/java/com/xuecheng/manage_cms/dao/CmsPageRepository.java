@@ -9,10 +9,23 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * MongoRepository中定义了很多现成的方法，如save、delete等
  * 同Spring Data JPA一样Spring Data mongodb也提供自定义方法的规则：
  * 按照ﬁndByXXX，ﬁndByXXXAndYYY、countByXXXAndYYY等规则定义方法，实现查询操作。
+ * 使用 Spring Data提供的ﬁndById方法完成根据主键查询 。
+ * 使用 Spring Data提供的save方法完成数据保存 。
  */
 public interface CmsPageRepository extends MongoRepository<CmsPage, String> {
     //根据页面名称查询
     CmsPage findByPageName(String pageName);
+
+    /**
+     * cms_page集合上创建页面名称、站点Id、页面webpath为唯一索引
+     * 根据页面名称、站点id、页面访问路径查询
+     *
+     * @param pageName    页面名称
+     * @param siteId      站点id
+     * @param pageWebPath 页面路径
+     * @return
+     */
+    CmsPage findByPageNameAndSiteIdAndPageWebPath(String pageName, String siteId, String pageWebPath);
 
     //根据页面名称和类型查询     
     CmsPage findByPageNameAndPageType(String pageName, String pageType);

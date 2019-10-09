@@ -22,5 +22,6 @@ public class QueryPageRequest extends RequestData {
     private String pageAliase;
     //模版id
     private String templateId;
-    //....
+    //页面类型（静态0/动态1）
+    private String pageType;
 }

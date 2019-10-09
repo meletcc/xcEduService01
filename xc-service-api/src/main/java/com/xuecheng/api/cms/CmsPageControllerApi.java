@@ -11,13 +11,14 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 页面查询接口
+ * 页面cms接口
  * 1、接口集中管理
  * 2、Api工程的接口将作为各微服务远程调用使用
  */
 @Api(value = "cms页面管理接口", description = "cms页面管理接口，提供页面的增、删、改、查")
 public interface CmsPageControllerApi {
 
+    // 查询页面列表
     @ApiOperation("分页查询页面列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "path", dataType = "int"),
@@ -25,19 +26,19 @@ public interface CmsPageControllerApi {
     })
     QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest);
 
-    //新增页面
+    // 新增页面
     @ApiOperation("新增页面")
-    public CmsPageResult add(CmsPage cmsPage);
+    CmsPageResult add(CmsPage cmsPage);
 
     //根据页面id查询页面信息
     @ApiOperation("根据页面id查询页面信息")
-    public CmsPage findById(String id);
+    CmsPage findById(String id);
 
-    //修改页面
+    //修改页面，先查到再改
     @ApiOperation("修改页面")
-    public CmsPageResult edit(String id, CmsPage cmsPage);
+    CmsPageResult edit(String id, CmsPage cmsPage);
 
-    //删除页面
+    //删除页面，先查到再删
     @ApiOperation("删除页面")
-    public ResponseResult delete(String id);
+    ResponseResult delete(String id);
 }

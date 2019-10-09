@@ -8,10 +8,7 @@ import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_cms.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cms/page")
@@ -49,22 +46,27 @@ public class CmsPageController implements CmsPageControllerApi {
     }
 
     @Override
-    public CmsPageResult add(CmsPage cmsPage) {
-        return null;
+    @PostMapping("/add")
+    // springMvc框架把从前端接受到的json数据转换成java对象
+    public CmsPageResult add(@RequestBody CmsPage cmsPage) {
+        return pageService.add(cmsPage);
     }
 
     @Override
-    public CmsPage findById(String id) {
-        return null;
+    @GetMapping("/get/{id}")
+    public CmsPage findById(@PathVariable("id") String id) {
+        return pageService.getById(id);
     }
 
     @Override
-    public CmsPageResult edit(String id, CmsPage cmsPage) {
-        return null;
+    @PutMapping("/edit/{id}")//这里使用put方法，http 方法中put表示更新
+    public CmsPageResult edit(@PathVariable("id") String id, @RequestBody CmsPage cmsPage) {
+        return pageService.update(id, cmsPage);
     }
 
     @Override
-    public ResponseResult delete(String id) {
-        return null;
+    @DeleteMapping("/del/{id}")
+    public ResponseResult delete(@PathVariable("id") String id) {
+        return pageService.delete(id);
     }
 }
