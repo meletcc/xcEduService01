@@ -35,7 +35,7 @@ public class CmsPageRepositoryTest {
         System.out.println(all);
     }
 
-    // 自定义条件查询测试
+    //自定义条件查询测试
     @Test
     public void testFindAllByExample() {
         //分页参数
@@ -54,7 +54,6 @@ public class CmsPageRepositoryTest {
         //条件匹配器
 //        ExampleMatcher exampleMatcher = ExampleMatcher.matching();
 //        exampleMatcher = exampleMatcher.withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
-        // 模糊查询
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
         //ExampleMatcher.GenericPropertyMatchers.contains() 包含关键字
@@ -80,7 +79,6 @@ public class CmsPageRepositoryTest {
             CmsPage save = cmsPageRepository.save(cmsPage);
             System.out.println(save);
         }
-
     }
 
     //根据页面名称查询

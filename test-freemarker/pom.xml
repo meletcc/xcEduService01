@@ -12,6 +12,7 @@
 
     <artifactId>test-freemarker</artifactId>
     <dependencies>
+        <!--springboot与freemarker整合-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>

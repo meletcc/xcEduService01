@@ -1,6 +1,10 @@
 package com.xuecheng.manage_cms.service;
 
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSDownloadStream;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.CmsTemplate;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
@@ -9,12 +13,27 @@ import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
+import com.xuecheng.manage_cms.dao.CmsConfigRepository;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
+import com.xuecheng.manage_cms.dao.CmsTemplateRepository;
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,6 +41,21 @@ public class PageService {
 
     @Autowired
     CmsPageRepository cmsPageRepository;
+
+    @Autowired
+    CmsConfigRepository cmsConfigRepository;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    CmsTemplateRepository cmsTemplateRepository;
+
+    @Autowired
+    GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    GridFSBucket gridFSBucket;
 
     /**
      * 页面查询方法
@@ -94,7 +128,9 @@ public class PageService {
 //        return new CmsPageResult(CommonCode.FAIL, null);
 //    }
 
-    // 新增页面
+    /**
+     * 新增页面
+     */
     public CmsPageResult add(CmsPage cmsPage) {
         if (cmsPage == null) {
             //抛出异常，非法参数异常..指定异常信息的内容
@@ -112,7 +148,9 @@ public class PageService {
         return new CmsPageResult(CommonCode.SUCCESS, cmsPage);
     }
 
-    // 根据页面id查询页面
+    /**
+     * 根据页面id查询页面
+     */
     public CmsPage getById(String id) {
         Optional<CmsPage> optional = cmsPageRepository.findById(id);
         if (optional.isPresent()) {
@@ -122,7 +160,9 @@ public class PageService {
         return null;
     }
 
-    // 修改页面
+    /**
+     * 根据id修改页面
+     */
     public CmsPageResult update(String id, CmsPage cmsPage) {
         //根据id从数据库查询页面信息
         CmsPage one = this.getById(id);
@@ -141,6 +181,8 @@ public class PageService {
             one.setPageWebPath(cmsPage.getPageWebPath());
             //更新物理路径
             one.setPagePhysicalPath(cmsPage.getPagePhysicalPath());
+            //更新dataUrl
+            one.setDataUrl(cmsPage.getDataUrl());
             //提交修改
             cmsPageRepository.save(one);
             return new CmsPageResult(CommonCode.SUCCESS, one);
@@ -149,15 +191,129 @@ public class PageService {
         return new CmsPageResult(CommonCode.FAIL, null);
     }
 
-    //根据id删除页面
+    /**
+     * 根据id删除页面
+     */
     public ResponseResult delete(String id) {
-        // 先查询一下 Optional一个容器化的工具
+        // 先查询一下
         Optional<CmsPage> optional = cmsPageRepository.findById(id);
         if (optional.isPresent()) {
             cmsPageRepository.deleteById(id);
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+    /**
+     * 页面静态化方法
+     * 1.静态化程序获取页面的DataUrl
+     * 2.静态化程序远程请求DataUrl获取数据模型。
+     * 3.静态化程序获取页面的模板信息
+     * 4.执行页面静态化
+     */
+    public String getPageHtml(String pageId) {
+        // 1.获取数据模型
+        Map model = getModelByPageId(pageId);
+        if (model == null) {
+            // 数据模型获取不到
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAISNULL);
+        }
+        // 2.获取页面的模板信息
+        String template = getTemplateByPageId(pageId);
+        if (StringUtils.isEmpty(template)) {
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_TEMPLATEISNULL);
+        }
+        // 3.执行静态化
+        String html = generateHtml(template, model);
+        return html;
+    }
+
+    // 1.获取数据模型
+    private Map getModelByPageId(String pageId) {
+        // 取出页面的信息
+        CmsPage cmsPage = this.getById(pageId);
+        if (cmsPage == null) {
+            // 页面不存在
+            ExceptionCast.cast(CmsCode.CMS_PAGE_NOTEXISTS);
+        }
+        // 取出页面的dataUrl
+        String dataUrl = cmsPage.getDataUrl();
+        if (StringUtils.isEmpty(dataUrl)) {
+            // 页面dataUrl为空
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_DATAURLISNULL);
+        }
+        // 通过 restTemplate请求dataUrl获取模型数据
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity(dataUrl, Map.class);
+        Map body = forEntity.getBody();
+        return body;
+    }
+
+    // 2.获取页面的模板信息
+    private String getTemplateByPageId(String pageId) {
+        // 取出页面的信息
+        CmsPage cmsPage = this.getById(pageId);
+        if (cmsPage == null) {
+            // 页面不存在
+            ExceptionCast.cast(CmsCode.CMS_PAGE_NOTEXISTS);
+        }
+        // 获取页面的模板id
+        String templateId = cmsPage.getTemplateId();
+        if (StringUtils.isEmpty(templateId)) {
+            // 模板id没有
+            ExceptionCast.cast(CmsCode.CMS_GENERATEHTML_TEMPLATEISNULL);
+        }
+        // 查询模板信息
+        Optional<CmsTemplate> optional = cmsTemplateRepository.findById(templateId);
+        if (optional.isPresent()) {
+            CmsTemplate cmsTemplate = optional.get();
+            // 根据模板信息获取模板文件id
+            String templateFileId = cmsTemplate.getTemplateFileId();
+            // 从GridFS中取模板文件内容
+            getFSfile(templateFileId);
+        }
+        return null;
+    }
+
+    /**
+     * 从GridFS中取模板文件内容
+     */
+    private String getFSfile(String templateFileId) {
+        String content = "";
+        // 根据文件id查询文件
+        GridFSFile gridFSFile = gridFsTemplate.findOne(Query.query(Criteria.where("_id").is(templateFileId)));
+        // 打开一个下载流对象
+        GridFSDownloadStream gridFSDownloadStream = gridFSBucket.openDownloadStream(gridFSFile.getObjectId());
+        // 创建GridFsResource对象，获取流
+        GridFsResource gridFsResource = new GridFsResource(gridFSFile, gridFSDownloadStream);
+        // 从流中取数据
+        try {
+            content = IOUtils.toString(gridFsResource.getInputStream(), "utf-8");
+            return content;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    // 3.执行静态化
+    private String generateHtml(String templateContent, Map model) {
+        // 创建配置对象
+        Configuration configuration = new Configuration(Configuration.getVersion());
+        // 创建模板加载器
+        StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
+        stringTemplateLoader.putTemplate("template", templateContent);
+        // 向configuration配置模板加载器
+        configuration.setTemplateLoader(stringTemplateLoader);
+        // 获取模板
+        try {
+            Template template = configuration.getTemplate("template");
+            // 调用api进行静态化
+            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
