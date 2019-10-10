@@ -12,11 +12,13 @@
 
     <artifactId>test-rabbitmq-consumer</artifactId>
     <dependencies>
-        <!--        <dependency>
-                    <groupId>com.rabbitmq</groupId>
-                    <artifactId>amqp-client</artifactId>
-                    <version>4.0.3</version>&lt;!&ndash;此版本与spring boot 1.5.9版本匹配&ndash;&gt;
-                </dependency>-->
+        <!--独立的mq客户端-->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>4.0.3</version><!--此版本与spring boot 1.5.9版本匹配-->
+        </dependency>
+        <!--与springboot集成-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -30,5 +32,4 @@
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
     </dependencies>
-
 </project>
