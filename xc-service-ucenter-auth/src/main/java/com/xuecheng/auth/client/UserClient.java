@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 远程调用微服务
+ * 微服务之间的远程调用：Feign客户端访问
+ * 认证服务远程调用用户中心微服务
  */
 @FeignClient(value = XcServiceList.XC_SERVICE_UCENTER)
 public interface UserClient {

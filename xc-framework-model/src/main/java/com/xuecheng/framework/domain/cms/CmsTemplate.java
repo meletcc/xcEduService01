@@ -26,6 +26,6 @@ public class CmsTemplate {
     //模版参数
     private String templateParameter;
 
-    //模版文件Id，此ID对应mongodb的GridFS文件系统中文件ID
+    //模版文件Id
     private String templateFileId;
 }

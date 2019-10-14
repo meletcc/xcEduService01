@@ -51,6 +51,7 @@ public class UserService {
             companyId = xcCompanyUser.getCompanyId();
         }
         XcUserExt xcUserExt = new XcUserExt();
+        // 复制
         BeanUtils.copyProperties(xcUser, xcUserExt);
         xcUserExt.setCompanyId(companyId);
         // 设置权限

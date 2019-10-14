@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * 用户信息扩展类：用户信息、权限信息
+ * Created by admin on 2018/3/20.
  */
 @Data
 @ToString
