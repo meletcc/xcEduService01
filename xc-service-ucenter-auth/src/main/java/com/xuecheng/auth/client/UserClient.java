@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Created by Administrator.
+ * 远程调用微服务
  */
 @FeignClient(value = XcServiceList.XC_SERVICE_UCENTER)
 public interface UserClient {
-    //根据账号查询用户信息
+    // 根据账号查询用户信息
     @GetMapping("/ucenter/getuserext")
-    public XcUserExt getUserext(@RequestParam("username") String username);
+    XcUserExt getUserext(@RequestParam("username") String username);
 }

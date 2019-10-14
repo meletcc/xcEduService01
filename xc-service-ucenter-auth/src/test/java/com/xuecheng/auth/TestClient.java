@@ -77,7 +77,7 @@ public class TestClient {
         System.out.println(bodyMap);
     }
 
-    //获取httpbasic的串
+    // 获取httpbasic的串
     private String getHttpBasic(String clientId, String clientSecret) {
         String string = clientId + ":" + clientSecret;
         //将串进行base64编码
@@ -85,20 +85,22 @@ public class TestClient {
         return "Basic " + new String(encode);
     }
 
+    /**
+     * 测试Bcrypt加密方式：每次都自动加个随机盐
+     */
     @Test
     public void testPasswrodEncoder() {
-        //原始密码
+        // 原始密码
         String password = "111111";
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        //使用BCrypt加密，每次加密使用一个随机盐
+        // 使用BCrypt加密，每次加密使用一个随机盐
         for (int i = 0; i < 10; i++) {
             String encode = bCryptPasswordEncoder.encode(password);
             System.out.println(encode);
-            //校验
+            // 校验
             boolean matches = bCryptPasswordEncoder.matches(password, encode);
             System.out.println(matches);
         }
-
     }
 
 }
