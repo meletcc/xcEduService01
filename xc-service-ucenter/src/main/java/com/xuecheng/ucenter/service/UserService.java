@@ -42,7 +42,6 @@ public class UserService {
         String userId = xcUser.getId();
         // 查询用户所有权限
         List<XcMenu> xcMenus = xcMenuMapper.selectPermissionByUserId(userId);
-
         // 根据用户id查询用户所属公司id
         XcCompanyUser xcCompanyUser = xcCompanyUserRepository.findByUserId(userId);
         // 取到用户的公司id

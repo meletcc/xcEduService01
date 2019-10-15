@@ -4,9 +4,9 @@ import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 课程计划mapper
- * Created by Administrator.
- */
+ * @author Administrator
+ * @version 1.0
+ **/
 @Mapper
 public interface TeachplanMapper {
     //课程计划查询

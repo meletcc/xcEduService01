@@ -67,6 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String password = userext.getPassword();
         // 这里暂时使用静态密码
 //       String password ="123";
+
         // 用户权限，这里暂时使用静态数据，最终会从数据库读取
         // 从数据库获取权限
         List<XcMenu> permissions = userext.getPermissions();
@@ -80,6 +81,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //        user_permission.add("course_get_baseinfo");// 查询课程信息权限
 //        user_permission.add("course_pic_list");// 图片查询权限
         String user_permission_string = StringUtils.join(user_permission.toArray(), ",");
+
+
         UserJwt userDetails = new UserJwt(username, password,
                 AuthorityUtils.commaSeparatedStringToAuthorityList(user_permission_string));
         userDetails.setId(userext.getId());

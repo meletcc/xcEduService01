@@ -40,7 +40,7 @@ public class AuthService {
     @Autowired
     RestTemplate restTemplate;
 
-    //用户认证申请令牌，将令牌存储到redis
+    // 用户认证申请令牌，将令牌存储到redis
     public AuthToken login(String username, String password, String clientId, String clientSecret) {
 
         //请求spring security申请令牌
@@ -50,9 +50,9 @@ public class AuthService {
         }
         //用户身份令牌
         String access_token = authToken.getAccess_token();
-        //存储到redis中的内容
+        // 存储到redis中的内容
         String jsonString = JSON.toJSONString(authToken);
-        //将令牌存储到redis
+        // 将令牌存储到redis
         boolean result = this.saveToken(access_token, jsonString, tokenValiditySeconds);
         if (!result) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_SAVEFAIL);
@@ -75,14 +75,14 @@ public class AuthService {
         return expire > 0;
     }
 
-    //删除token
+    // 删除token
     public boolean delToken(String access_token) {
         String key = "user_token:" + access_token;
         stringRedisTemplate.delete(key);
         return true;
     }
 
-    //从redis查询令牌
+    // 从redis查询令牌
     public AuthToken getUserToken(String token) {
         String key = "user_token:" + token;
         //从redis中取到令牌信息
@@ -98,7 +98,7 @@ public class AuthService {
 
     }
 
-    //申请令牌
+    // 申请令牌
     private AuthToken applyToken(String username, String password, String clientId, String clientSecret) {
         //从eureka中获取认证服务的地址（因为spring security在认证服务中）
         //从eureka中获取认证服务的一个实例的地址

@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * 响应结果
+ */
 @Data
 @ToString
 @NoArgsConstructor
