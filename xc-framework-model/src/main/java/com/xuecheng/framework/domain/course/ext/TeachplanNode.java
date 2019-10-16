@@ -7,18 +7,20 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * Created by admin on 2018/2/7.
+ * 作为查询返回值的扩展类，不是和数据库表一一对应的
+ * 课程计划返回值需要树形结构
  */
 @Data
 @ToString
 public class TeachplanNode extends Teachplan {
 
+    // 子节点
     List<TeachplanNode> children;
 
-    //媒资文件id
+    // 媒资文件id
     String mediaId;
-    //媒资文件原始名称
-    String mediaFileoriginalname;
 
+    // 媒资文件原始名称
+    String mediaFileoriginalname;
 
 }

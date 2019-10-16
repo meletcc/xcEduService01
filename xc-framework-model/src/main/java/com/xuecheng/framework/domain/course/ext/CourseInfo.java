@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * Created by admin on 2018/2/10.
+ * 我的课程返回扩展类：课程基本信息表 + 课程图片表
  */
 @Data
 @ToString
 public class CourseInfo extends CourseBase {
-
-    //课程图片
+    // 课程图片，存在fastDfs中
     private String pic;
-
 }

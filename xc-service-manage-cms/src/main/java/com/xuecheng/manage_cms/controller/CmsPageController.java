@@ -29,17 +29,17 @@ public class CmsPageController implements CmsPageControllerApi {
     @GetMapping("/list/{page}/{size}")
     public QueryResponseResult findList(@PathVariable("page") int page, @PathVariable("size") int size, QueryPageRequest queryPageRequest) {
 
-/*      //暂时用静态数据
-        //定义queryResult
-        QueryResult<CmsPage> queryResult =new QueryResult<>();
-        List<CmsPage> list = new ArrayList<>();
-        CmsPage cmsPage = new CmsPage();
-        cmsPage.setPageName("测试页面");
-        list.add(cmsPage);
-        queryResult.setList(list);
-        queryResult.setTotal(1);
-        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
-        return queryResponseResult;*/
+        // 暂时用静态数据
+        // 定义queryResult ：数据列表和数据总数
+//        QueryResult<CmsPage> queryResult = new QueryResult<>();
+//        List<CmsPage> list = new ArrayList<>();
+//        CmsPage cmsPage = new CmsPage();
+//        cmsPage.setPageName("测试页面");
+//        list.add(cmsPage);
+//        queryResult.setList(list);
+//        queryResult.setTotal(1);
+//        QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+//        return queryResponseResult;
 
         //调用service
         return pageService.findList(page, size, queryPageRequest);
@@ -69,7 +69,6 @@ public class CmsPageController implements CmsPageControllerApi {
     public ResponseResult delete(@PathVariable("id") String id) {
         return pageService.delete(id);
     }
-
 
     @Override
     @PostMapping("/postPage/{pageId}")

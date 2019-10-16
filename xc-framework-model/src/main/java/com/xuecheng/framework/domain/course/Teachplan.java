@@ -7,12 +7,14 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
-
+/**
+ * 课程计划实体类
+ */
 @Data
 @ToString
-@Entity
-@Table(name="teachplan")
-@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+@Entity// jpa需要这个注解标识模型类
+@Table(name = "teachplan")// 标注表名称
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")// 主键生成规则、策略
 public class Teachplan implements Serializable {
     private static final long serialVersionUID = -916357110051689485L;
     @Id

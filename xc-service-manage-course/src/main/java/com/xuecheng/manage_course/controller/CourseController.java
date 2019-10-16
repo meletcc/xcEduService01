@@ -18,10 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @author Administrator
- * @version 1.0
- **/
 @RestController
 @RequestMapping("/course")
 public class CourseController extends BaseController implements CourseControllerApi {
@@ -29,7 +25,8 @@ public class CourseController extends BaseController implements CourseController
     @Autowired
     CourseService courseService;
 
-    //当用户拥有course_teachplan_list权限时候方可访问此方法
+    // 课程计划查询
+    // 当用户拥有course_teachplan_list权限时候方可访问此方法
     @PreAuthorize("hasAuthority('course_teachplan_list')")
     @Override
     @GetMapping("/teachplan/list/{courseId}")
@@ -37,11 +34,11 @@ public class CourseController extends BaseController implements CourseController
         return courseService.findTeachplanList(courseId);
     }
 
+    // 添加课程计划
     @PreAuthorize("hasAuthority('course_teachplan_add')")
     @Override
     @PostMapping("/teachplan/add")
     public ResponseResult addTeachplan(@RequestBody Teachplan teachplan) {
-
         return courseService.addTeachplan(teachplan);
     }
 
@@ -90,15 +87,16 @@ public class CourseController extends BaseController implements CourseController
         return courseService.savemedia(teachplanMedia);
     }
 
+    // 我的课程，查询课程列表
     @Override
     @GetMapping("/coursebase/list/{page}/{size}")
     public QueryResponseResult<CourseInfo> findCourseList(@PathVariable("page") int page,
                                                           @PathVariable("size") int size,
                                                           CourseListRequest courseListRequest) {
-        //获取当前用户信息
+        // 获取当前用户信息
         XcOauth2Util xcOauth2Util = new XcOauth2Util();
         XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
-        //当前用户所属单位的id
+        // 当前用户所属单位的id
         String company_id = userJwt.getCompanyId();
         QueryResponseResult<CourseInfo> queryResponseResult = courseService.findCourseList(company_id, page, size, courseListRequest);
         return queryResponseResult;

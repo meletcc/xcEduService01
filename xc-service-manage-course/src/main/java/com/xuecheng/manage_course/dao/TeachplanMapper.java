@@ -4,11 +4,11 @@ import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author Administrator
- * @version 1.0
+ * 课程计划 mapper
  **/
 @Mapper
 public interface TeachplanMapper {
-    //课程计划查询
-    public TeachplanNode selectList(String courseId);
+
+    // 课程计划查询
+    TeachplanNode selectList(String courseId);
 }

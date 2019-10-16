@@ -12,17 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * @author Administrator
- * @version 1.0
- **/
 @EnableFeignClients //开始feignClient
 @EnableDiscoveryClient
 @SpringBootApplication
-@EntityScan("com.xuecheng.framework.domain.course")//扫描实体类
-@ComponentScan(basePackages={"com.xuecheng.api"})//扫描接口
-@ComponentScan(basePackages={"com.xuecheng.manage_course"})
-@ComponentScan(basePackages={"com.xuecheng.framework"})//扫描common下的所有类
+@EntityScan("com.xuecheng.framework.domain.course")// 扫描实体类
+@ComponentScan(basePackages = {"com.xuecheng.api"})// 扫描接口
+@ComponentScan(basePackages = {"com.xuecheng.manage_course"})
+@ComponentScan(basePackages = {"com.xuecheng.framework"})// 扫描common下的所有类
 public class ManageCourseApplication {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(ManageCourseApplication.class, args);
@@ -30,12 +26,12 @@ public class ManageCourseApplication {
 
     @Bean
     @LoadBalanced//开始客户端负载均衡
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
     }
 
     @Bean
-    public FeignClientInterceptor getFeignClientInterceptor(){
+    public FeignClientInterceptor getFeignClientInterceptor() {
         return new FeignClientInterceptor();
     }
 }

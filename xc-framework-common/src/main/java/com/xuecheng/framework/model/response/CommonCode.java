@@ -3,7 +3,7 @@ package com.xuecheng.framework.model.response;
 import lombok.ToString;
 
 /**
- *
+ * 统一结果代码
  */
 @ToString
 public enum CommonCode implements ResultCode {

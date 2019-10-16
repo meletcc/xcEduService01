@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * Created by admin on 2018/2/7.
+ * 作为查询返回值的扩展类，不是和数据库表一一对应的
  */
 @Data
 @ToString

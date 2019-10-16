@@ -78,33 +78,33 @@ public class PageService {
         if (queryPageRequest == null) {
             queryPageRequest = new QueryPageRequest();
         }
-        //自定义条件查询
-        //定义条件匹配器：根据页面名称模糊匹配
+        // 自定义条件查询
+        // 定义条件匹配器：根据页面名称模糊匹配
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
-        //条件值对象
+        // 条件值对象
         CmsPage cmsPage = new CmsPage();
-        //设置条件值（站点id）：精确匹配
+        // 设置条件值（站点id）：精确匹配
         if (StringUtils.isNotEmpty(queryPageRequest.getSiteId())) {
             cmsPage.setSiteId(queryPageRequest.getSiteId());
         }
-        //设置模板id作为查询条件
+        // 设置模板id作为查询条件
         if (StringUtils.isNotEmpty(queryPageRequest.getTemplateId())) {
             cmsPage.setTemplateId(queryPageRequest.getTemplateId());
         }
-        //设置页面别名作为查询条件
+        // 设置页面别名作为查询条件
         if (StringUtils.isNotEmpty(queryPageRequest.getPageAliase())) {
             cmsPage.setPageAliase(queryPageRequest.getPageAliase());
         }
-        //设置页面名称pageName：模糊查找
+        // 设置页面名称pageName：模糊查找
         if (StringUtils.isNotEmpty(queryPageRequest.getPageName())) {
             cmsPage.setPageName(queryPageRequest.getPageName());
         }
-        //设置页面类型pageType：精确查找。静态和动态，数据库中静态用“0”，动态用“1”表示
+        // 设置页面类型pageType：精确查找。静态和动态，数据库中静态用“0”，动态用“1”表示
         if (StringUtils.isNotEmpty(queryPageRequest.getPageType())) {
             cmsPage.setPageType(queryPageRequest.getPageType());
         }
-        //定义条件对象Example
+        // 定义条件对象Example
         Example<CmsPage> example = Example.of(cmsPage, exampleMatcher);
         //分页参数
         if (page <= 0) {
@@ -115,27 +115,14 @@ public class PageService {
             size = 10;
         }
         Pageable pageable = PageRequest.of(page, size);
-        Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);//实现自定义条件查询并且分页查询
+        // 实现自定义条件查询并且分页查询
+        Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);
         QueryResult queryResult = new QueryResult();
-        queryResult.setList(all.getContent());//数据列表
-        queryResult.setTotal(all.getTotalElements());//数据总记录数
+        queryResult.setList(all.getContent());// 数据列表
+        queryResult.setTotal(all.getTotalElements());// 数据总记录数
         QueryResponseResult queryResponseResult = new QueryResponseResult(CommonCode.SUCCESS, queryResult);
         return queryResponseResult;
     }
-
-//    public CmsPageResult add(CmsPage cmsPage) {
-//        //校验页面是否存在，根据页面名称、站点Id、页面webpath查询                  
-//        CmsPage cmsPage1 = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(), cmsPage.getSiteId(), cmsPage.getPageWebPath());
-//        if (cmsPage1 == null) {
-//            cmsPage.setPageId(null);//添加页面主键由spring data 自动生成             
-//            cmsPageRepository.save(cmsPage);
-//            //返回结果             
-//            CmsPageResult cmsPageResult = new CmsPageResult(CommonCode.SUCCESS, cmsPage);
-//            return cmsPageResult;
-//        }
-//        // 已经有该页面，添加失败
-//        return new CmsPageResult(CommonCode.FAIL, null);
-//    }
 
     /**
      * 新增页面
@@ -143,6 +130,7 @@ public class PageService {
     public CmsPageResult add(CmsPage cmsPage) {
         if (cmsPage == null) {
             //抛出异常，非法参数异常..指定异常信息的内容
+            ExceptionCast.cast(CommonCode.INVALID_PARAM);
         }
         //校验页面名称、站点Id、页面webpath的唯一性
         //根据页面名称、站点Id、页面webpath去cms_page集合，如果查到说明此页面已经存在，如果查询不到才添加
@@ -196,7 +184,7 @@ public class PageService {
             cmsPageRepository.save(one);
             return new CmsPageResult(CommonCode.SUCCESS, one);
         }
-        //修改失败
+        // 修改失败
         return new CmsPageResult(CommonCode.FAIL, null);
     }
 

@@ -43,7 +43,7 @@ public interface CourseControllerApi {
     @ApiOperation("保存课程计划与媒资文件关联")
     ResponseResult savemedia(TeachplanMedia teachplanMedia);
 
-    @ApiOperation("课程查询")
+    @ApiOperation("课程列表查询")
     QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest);
 
 }

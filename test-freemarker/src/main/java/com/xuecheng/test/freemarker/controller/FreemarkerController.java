@@ -40,7 +40,7 @@ public class FreemarkerController {
     @RequestMapping("/test1")
     public String freemarker(Map<String, Object> map) {
         // 向数据模型放数据
-        map.put("name", "黑马程序员");
+        map.put("name", "廖总");
         Student stu1 = new Student();
         stu1.setName("小明");
         stu1.setAge(18);
@@ -66,7 +66,8 @@ public class FreemarkerController {
         stuMap.put("stu2", stu2);
         // 向数据模型放数据
         map.put("stu1", stu1);
-        // 向数据模型放数据
+
+        // 向数据模型放数据，stuMap是个对象
         map.put("stuMap", stuMap);
         // 返回模板文件名称，模型文件在resources下templates目录中，test1.ftl格式
         return "test1";

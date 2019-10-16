@@ -14,35 +14,31 @@ import io.swagger.annotations.ApiOperation;
  * 页面cms接口
  * 1、接口集中管理
  * 2、Api工程的接口将作为各微服务远程调用使用
+ * CMS服务工程编写Controller类实现此接口
  */
 @Api(value = "cms页面管理接口", description = "cms页面管理接口，提供页面的增、删、改、查")
 public interface CmsPageControllerApi {
 
-    // 查询页面列表
-    @ApiOperation("分页查询页面列表")
+    @ApiOperation("根据查询条件分页查询页面列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "path", dataType = "int"),
             @ApiImplicitParam(name = "size", value = "每页记录数", required = true, paramType = "path", dataType = "int")
     })
     QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest);
 
-    // 新增页面
     @ApiOperation("新增页面")
     CmsPageResult add(CmsPage cmsPage);
 
-    //根据页面id查询页面信息
     @ApiOperation("根据页面id查询页面信息")
     CmsPage findById(String id);
 
-    //修改页面，先查到再改
     @ApiOperation("修改页面")
     CmsPageResult edit(String id, CmsPage cmsPage);
 
-    //删除页面，先查到再删
     @ApiOperation("删除页面")
     ResponseResult delete(String id);
 
-    //页面发布
     @ApiOperation("页面发布")
-    public ResponseResult post(String pageId);
+    ResponseResult post(String pageId);
+
 }

@@ -5,11 +5,11 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * Created by mrt on 2018/4/13.
+ * 我的课程查询条件
  */
 @Data
 @ToString
 public class CourseListRequest extends RequestData {
-    //公司Id
+    // 公司Id
     private String companyId;
 }
