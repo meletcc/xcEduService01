@@ -1,12 +1,12 @@
 package com.xuecheng.api.course;
 
-import com.xuecheng.framework.domain.course.CoursePic;
-import com.xuecheng.framework.domain.course.Teachplan;
-import com.xuecheng.framework.domain.course.TeachplanMedia;
+import com.xuecheng.framework.domain.course.*;
+import com.xuecheng.framework.domain.course.ext.CategoryNode;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
@@ -45,5 +45,23 @@ public interface CourseControllerApi {
 
     @ApiOperation("课程列表查询")
     QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest);
+
+    @ApiOperation("课程分类查询")
+    CategoryNode findList();
+
+    @ApiOperation("添加课程基础信息")
+    AddCourseResult addCourseBase(CourseBase courseBase);
+
+    @ApiOperation("根据id查询课程基础信息")
+    CourseBase getCourseBaseById(String courseId);
+
+    @ApiOperation("更新课程基础信息")
+    ResponseResult updateCourseBase(String id, CourseBase courseBase);
+
+    @ApiOperation("获取课程营销信息")
+    CourseMarket getCourseMarketById(String courseId);
+
+    @ApiOperation("更新课程营销信息")
+    ResponseResult updateCourseMarket(String id, CourseMarket courseMarket);
 
 }

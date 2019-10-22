@@ -4,7 +4,7 @@ import com.xuecheng.framework.domain.course.CourseMarket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Created by Administrator.
+ * 课程营销信息
  */
-public interface CourseMarketRepository extends JpaRepository<CourseMarket,String> {
+public interface CourseMarketRepository extends JpaRepository<CourseMarket, String> {
 }

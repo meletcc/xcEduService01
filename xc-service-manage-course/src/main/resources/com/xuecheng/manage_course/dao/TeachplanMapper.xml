@@ -15,8 +15,6 @@
             <collection property="children" ofType="com.xuecheng.framework.domain.course.ext.TeachplanNode">
                 <id column="three_id" property="id"></id>
                 <result column="three_pname" property="pname"></result>
-                <result column="media_id" property="mediaId"></result>
-                <result column="media_fileoriginalname" property="mediaFileoriginalname"></result>
             </collection>
         </collection>
     </resultMap>
@@ -28,21 +26,16 @@
         b.id as two_id,
         b.pname as two_pname,
         c.id as three_id,
-        c.pname as three_pname,
-        teachplan_media.media_id,
-        teachplan_media.media_fileoriginalname
+        c.pname as three_pname
         FROM
         teachplan a
         LEFT JOIN teachplan b
         ON b.parentid = a.id
         LEFT JOIN teachplan c
         ON c.parentid = b.id
-        LEFT JOIN teachplan_media ON c.id = teachplan_media.teachplan_id
         WHERE a.parentid = '0'
-        -- 针对输入参数为简单类型#{}中可以是任意类型
-        -- 判断参数是否为空要用 _parameter（它属于mybatis的内置参数）
-        <if test="_parameter != null and _parameter != ''">
-            AND a.courseid = #{courseId}
+        <if test="courseId != null">
+            and a.courseid=#{courseId}
         </if>
         ORDER BY a.orderby,
         b.orderby,

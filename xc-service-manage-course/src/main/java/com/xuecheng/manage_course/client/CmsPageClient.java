@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @FeignClient(value = "XC-SERVICE-MANAGE-CMS")// 指定远程调用的服务名
 public interface CmsPageClient {
+
     // 根据页面id查询页面信息，远程调用cms请求数据
     @GetMapping("/cms/page/get/{id}")
-//用GetMapping标识远程调用的http的方法类型
+
+    //用GetMapping标识远程调用的http的方法类型
     CmsPage findCmsPageById(@PathVariable("id") String id);
 
     // 添加页面，用于课程预览

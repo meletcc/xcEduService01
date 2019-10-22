@@ -9,12 +9,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by admin on 2018/2/10.
+ * 课程营销信息类
  */
 @Data
 @ToString
 @Entity
-@Table(name="course_market")
+@Table(name = "course_market")
 @GenericGenerator(name = "jpa-assigned", strategy = "assigned")
 public class CourseMarket implements Serializable {
     private static final long serialVersionUID = -916357110051689486L;
@@ -27,7 +27,7 @@ public class CourseMarket implements Serializable {
     private String qq;
     private Float price;
     private Float price_old;
-//    private Date expires;
+    //    private Date expires;
     @Column(name = "start_time")
     private Date startTime;
     @Column(name = "end_time")

@@ -20,12 +20,12 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages = {"com.xuecheng.manage_course"})
 @ComponentScan(basePackages = {"com.xuecheng.framework"})// 扫描common下的所有类
 public class ManageCourseApplication {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(ManageCourseApplication.class, args);
     }
 
     @Bean
-    @LoadBalanced//开始客户端负载均衡
+    @LoadBalanced// 开始客户端负载均衡
     public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
     }

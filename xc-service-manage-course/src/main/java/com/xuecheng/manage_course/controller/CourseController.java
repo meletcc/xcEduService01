@@ -1,14 +1,15 @@
 package com.xuecheng.manage_course.controller;
 
 import com.xuecheng.api.course.CourseControllerApi;
-import com.xuecheng.framework.domain.course.CoursePic;
-import com.xuecheng.framework.domain.course.Teachplan;
-import com.xuecheng.framework.domain.course.TeachplanMedia;
+import com.xuecheng.framework.domain.course.*;
+import com.xuecheng.framework.domain.course.ext.CategoryNode;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
+import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.utils.XcOauth2Util;
@@ -48,7 +49,7 @@ public class CourseController extends BaseController implements CourseController
         return courseService.addCoursePic(courseId, pic);
     }
 
-    //当用户拥有course_pic_list权限时候方可访问此方法
+    // 当用户拥有course_pic_list权限时候方可访问此方法
     @PreAuthorize("hasAuthority('course_pic_list')")
     @Override
     @GetMapping("/coursepic/list/{courseId}")
@@ -100,5 +101,51 @@ public class CourseController extends BaseController implements CourseController
         String company_id = userJwt.getCompanyId();
         QueryResponseResult<CourseInfo> queryResponseResult = courseService.findCourseList(company_id, page, size, courseListRequest);
         return queryResponseResult;
+    }
+
+    // 课程分类查询
+    @Override
+    @GetMapping(value = "/category/list")
+    public CategoryNode findList() {
+        return courseService.findList();
+    }
+
+    // 添加课程提交
+    @Override
+    @PostMapping(value = "/coursebase/add")
+    public AddCourseResult addCourseBase(@RequestBody CourseBase courseBase) {
+        return courseService.addCourseBase(courseBase);
+    }
+
+    // 根据课程id查询课程
+    @Override
+    @GetMapping("/coursebase/get/{courseId}")
+    public CourseBase getCourseBaseById(@PathVariable("courseId") String courseId) {
+        return courseService.getCourseById(courseId);
+    }
+
+    // 更新课程基础信息
+    @Override
+    @PutMapping("/coursebase/update/{id}")
+    public ResponseResult updateCourseBase(@PathVariable("id") String id, @RequestBody CourseBase courseBase) {
+        return courseService.updateCoursebase(id, courseBase);
+    }
+
+    // 根据id查询课程营销信息
+    @Override
+    @GetMapping("/coursemarket/get/{courseId}")
+    public CourseMarket getCourseMarketById(@PathVariable("courseId") String courseId) {
+        return courseService.getCourseMarkeytById(courseId);
+    }
+
+    // 更新课程营销信息
+    @Override
+    @PostMapping("/coursemarket/update/{id}")
+    public ResponseResult updateCourseMarket(@PathVariable("id") String id, @RequestBody CourseMarket courseMarket) {
+        CourseMarket market = courseService.updateCourseMarket(id, courseMarket);
+        if (market == null) {
+            return new ResponseResult(CommonCode.FAIL);
+        }
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 }
