@@ -1,16 +1,21 @@
 server:
+  #用这种方式类似环境变量，如果没有设置PORT的值，则使用50101。如果设置则覆盖
+  #这里可以制作两个启动脚本，配置不同端口实现高可用
+  #实际环境至少部署服务器
   port: ${PORT:50101} #服务端口
 spring:
   application:
     name: xc-govern-center #指定服务名
 eureka:
   client:
-    registerWithEureka: true #服务注册，是否将自己注册到Eureka服务中
-    fetchRegistry: true #服务发现，是否从Eureka中获取注册信息
+    # 单机版的server不能注册和发现自己，都置为false
+    registerWithEureka: true #服务注册，被其它服务调用时需向Eureka注册（注册自己）
+    fetchRegistry: true #服务发现，是否从Eureka中获取注册信息，需要从Eureka中查找要调用的目标服务时需要设置为true
     serviceUrl: #Eureka客户端与Eureka服务端的交互地址，高可用状态配置对方的地址，单机状态配置自己（如果不配置则默认本机8761端口）
-      defaultZone: ${EUREKA_SERVER:http://eureka02:50102/eureka/}
+      defaultZone: ${EUREKA_SERVER:http://eureka01:50101/eureka/} #一定是主机名或域名
   server:
-    enable-self-preservation: false #是否开启自我保护模式
+    enable-self-preservation: false #是否开启自我保护模式（开发模式建议关闭）
     eviction-interval-timer-in-ms: 60000 #服务注册表清理间隔（单位毫秒，默认是60*1000）
+  #主机名，自己叫 eureka01
   instance:
     hostname: ${EUREKA_DOMAIN:eureka01}
