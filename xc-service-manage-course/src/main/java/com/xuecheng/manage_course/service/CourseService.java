@@ -114,7 +114,7 @@ public class CourseService {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
-    //查询课程的根结点，如果查询不到要自动添加根结点
+    // 查询课程的根结点，如果查询不到要自动添加根结点
     private String getTeachplanRoot(String courseId) {
         Optional<CourseBase> optional = courseBaseRepository.findById(courseId);
         if (!optional.isPresent()) {
@@ -139,12 +139,12 @@ public class CourseService {
         return teachplanList.get(0).getId();
     }
 
-    //向课程管理数据添加课程与图片的关联信息
+    // 向课程管理数据中添加课程与图片的关联信息
     @Transactional
     public ResponseResult addCoursePic(String courseId, String pic) {
-        //课程图片信息
+        // 课程图片信息
         CoursePic coursePic = null;
-        //查询课程图片
+        // 查询课程图片
         Optional<CoursePic> picOptional = coursePicRepository.findById(courseId);
         if (picOptional.isPresent()) {
             coursePic = picOptional.get();
@@ -158,9 +158,9 @@ public class CourseService {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
-    //查询课程图片
+    // 查询课程图片
     public CoursePic findCoursePic(String courseId) {
-        //查询课程图片
+        // 查询课程图片
         Optional<CoursePic> picOptional = coursePicRepository.findById(courseId);
         if (picOptional.isPresent()) {
             CoursePic coursePic = picOptional.get();
@@ -169,10 +169,10 @@ public class CourseService {
         return null;
     }
 
-    //删除课程图片
+    // 删除课程图片
     @Transactional
     public ResponseResult deleteCoursePic(String courseId) {
-        //执行删除
+        // 执行删除
         long result = coursePicRepository.deleteByCourseid(courseId);
         if (result > 0) {
             return new ResponseResult(CommonCode.SUCCESS);

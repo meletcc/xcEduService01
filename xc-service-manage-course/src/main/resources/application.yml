@@ -19,6 +19,7 @@ spring:
       minEvictableIdleTimeMillis: 300000  #连接在连接池的最小生存时间（毫秒）
 pagehelper:
   helper-dialect: mysql #支持多种数据库，在这里进行配置即可
+
 eureka:
   client:
     registerWithEureka: true #服务注册开关
@@ -29,6 +30,7 @@ eureka:
     prefer-ip-address:  true  #将自己的ip地址注册到Eureka服务中
     ip-address: ${IP_ADDRESS:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port} #指定实例id
+
 ribbon:
   MaxAutoRetries: 2 #最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试
   MaxAutoRetriesNextServer: 3 #切换实例的重试次数

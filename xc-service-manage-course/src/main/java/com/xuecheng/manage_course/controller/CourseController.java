@@ -43,12 +43,15 @@ public class CourseController extends BaseController implements CourseController
         return courseService.addTeachplan(teachplan);
     }
 
+    // 添加课程图片
+    // 如果不是用url方式传参，则参数需要 @RequestParam("")的方式传入 k-v串
     @Override
     @PostMapping("/coursepic/add")
     public ResponseResult addCoursePic(@RequestParam("courseId") String courseId, @RequestParam("pic") String pic) {
         return courseService.addCoursePic(courseId, pic);
     }
 
+    // 课程图片查询
     // 当用户拥有course_pic_list权限时候方可访问此方法
     @PreAuthorize("hasAuthority('course_pic_list')")
     @Override
@@ -57,6 +60,7 @@ public class CourseController extends BaseController implements CourseController
         return courseService.findCoursePic(courseId);
     }
 
+    // 删除课程图片
     @Override
     @DeleteMapping("/coursepic/delete")
     public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
